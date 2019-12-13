@@ -9,3 +9,5 @@ It didn't come out the way I wanted... I wanted data_acqusition/rcdaq etc. Next 
 All credit goes to Dr. Martin Purschke 
 
 The lastest version does not work with Centos version < 7
+
+Read INSTALL for installation instruction
