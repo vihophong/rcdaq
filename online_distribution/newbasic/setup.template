@@ -1,0 +1,12 @@
+
+
+foreach package  ( UTILITIES DD  EVT MSG  RAWFMT )
+
+setenv ${package}_MAIN  PREFIX_STRING
+setenv ${package}_INC   INCLUDEDIR_STRING
+setenv ${package}_LIB   LIBDIR_STRING
+setenv ${package}_BIN   BINDIR_STRING
+
+end
+
+

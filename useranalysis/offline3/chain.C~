@@ -1,0 +1,11 @@
+{
+  TChain *test = new TChain("tree");
+
+  test-> Add("test32.root");
+  test-> Add("test33.root");
+  test-> Add("test34.root");
+  test-> Add("test35.root");
+  test-> Add("test36.root");
+  test-> Add("test37.root");
+  test-> Add("test38.root");
+}

@@ -1,0 +1,49 @@
+
+mlp 4/20/2000
+
+a few crude examples to show off the pmonitor operation. 
+
+p_ex1  is a very simple example, showing the use of the two basic functions
+	p_init() and process_event.
+	use as follows:
+
+	make -f p_ex1Makefile
+	[should build libp_ex1.so]
+
+	root
+	> gSystem->Load("libp_ex1.so");
+	> pstatus();   // shows status, should be "not running - no stream open"
+	> ptestopen(); // open a test stream
+	> pstart();    // start processing
+	> H1->Draw();  // draws the histo while it is being filled 
+			// repeat command or click in the histo to redraw and see the update
+	> pstop()     //stops processing
+	> pclose()    // ccloses the currently open stream
+	> .q
+
+You can repeat the pstatus() command as often as you wish and see the
+current status. The event number should increase rapidly.
+
+Try to execute the macro fit.C. It will fit a gaussian to the histogram H1.
+
+> .x fit.C 
+
+This is to show that you can run macros while the background thread is filling the events.
+Also, try to reset the histogram:
+
+> H1->Reset();
+
+This can all be done while the histograms are being filled in the 
+background by the analysis thread.
+
+p_ex2
+
+p_ex2 shows how you can define custom commands which influence the way
+the events are processed. Here you have two histograms, and you can
+switch the filling of either one on or off with h1enable() and
+h2enable(), and h1disable() and h2disable(), respectively. You can
+display the status with h1status() and h2status().
+
+This one can be made with make -f p_ex2Makefile.
+
+

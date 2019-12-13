@@ -1,0 +1,334 @@
+# Microsoft Developer Studio Generated NMAKE File, Based on a_dll.dsp
+
+CFG=a_dll - Win32 Debug
+
+CPP=cl.exe
+MTL=midl.exe
+RSC=rc.exe
+
+
+OUTDIR=
+INTDIR=
+
+
+
+#CPP_PROJ=-nologo -G6 -MTd -W3 -Gm -GR -GX -ZI -Od -FD  -I. -I ../zlib -D "WIN32" -D "WINDOWS" -D "_DEBUG" -D "_WINDOWS" -D "_MBCS" -D "_USRDLL" -D__GNU_LIBRARY__ "A_DLL_EXPORTS" -DZLIB_DLL -c 
+
+#CPP_PROJ=-nologo  /MLd /W3 /Gm /GX /ZI /Od -FD /D "WIN32" /D "_DEBUG"  -I. -I ../zlib -D "WIN32" -D "WINDOWS" -D "NDEBUG" -D "_WINDOWS" -D "_MBCS" -D "_USRDLL"  -c 
+
+#CPP_PROJ=-nologo  /ML   /D "WIN32"   -I. -I ../zlib -GX -D "WIN32" -D "WINDOWS" -D "DEBUG" -D "_WINDOWS" -D "_MBCS" -D "_USRDLL"  -c
+
+###this is the debug lvl2 build
+#CPP_PROJ= -nologo  /MDd  /D "WIN32"   -I. -I ../zlib -GX -D "WIN32" -D "WINDOWS" -D "DEBUG" -D "_WINDOWS" -D "_MBCS" -D "_USRDLL"  -c -D "LVL2_WINNT" /ZI
+
+####this is the optimized lvl2 build
+CPP_PROJ= -nologo /MD /W3 /GX /O2 -I ../lzo/include -I "c:\Program Files\zlib\zlib-1.2.1"  /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" -D "WINDOWS" /D "LVL2_WINNT" -I. -c
+
+CPP_PROJC=-nologo  /ML  -W3 -Gm -GX -ZI -Od -FD -I ../lzo/include  -I "c:\Program Files\zlib\zlib-1.2.1" -D "WIN32" -D "_WINDOWS" -D "_MBCS" -D "_USRDLL" -c 
+
+
+MTL_PROJ=-nologo -D "NDEBUG" -mktyplib203 -win32 
+
+
+BSC32_FLAGS=-nologo -o"$(OUTDIR)\a_dll.bsc" 
+
+BSC32_SBRS=
+
+LINK32=link.exe
+
+BSC32=bscmake.exe
+
+
+#LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib -nologo  -machine:I386 -NODEFAULTLIB:"LIBCMT.LIB"  -NODEFAULTLIB:"msvcrt.lib" -NODEFAULTLIB:"libcd.lib" -NODEFAULTLIB:"libcmtd.lib" -NODEFAULTLIB:"libcpd.lib" -NODEFAULTLIB:"libcpmtd.lib" -NODEFAULTLIB:"msvcprtd.lib"
+
+LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib -nologo -machine:I386 -NODEFAULTLIB:LIBCID.LIB -NODEFAULTLIB:LIBCIMTD.LIB
+# -debug
+
+LINKDLL_FLAGS=-dll -incremental:no -pdb:"$(OUTDIR)\a_dll.pdb"
+
+UNUSED=\
+  db.obj \
+  dd.obj \
+  dd_cwrapper.obj \
+  dd_demon.obj \
+  dd_exception.obj \
+  dd_factory.obj \
+  dd_garbage_d.obj \
+  dd_phenix_msg.obj \
+  dd_server.obj \
+  dd_specs.obj \
+  dd_usercode.obj \
+  ddn_cmd.obj \
+  ddn_fifo_entry.obj \
+  fifo.obj \
+  fifo_entry.obj \
+  fifo_evaluate.obj \
+  fifo_iterator.obj \
+  fifo_mode.obj \
+  fifo_specs.obj \
+  fifo_system.obj \
+  ldd.obj \
+  rdd.obj \
+   EnvVarHandler.obj \
+   chrono.obj \
+   interpret_filename.obj \
+   ot_logger.obj \
+   otnet_demon.obj \
+   otnet_object.obj \
+   pipc.obj \
+   pnap.obj \
+   psem.obj \
+   pshm.obj \
+   pstring.obj \
+   timer.obj \
+   md5.obj \
+   PHmd5Utils.obj \
+   PHmd5Value.obj \
+   haveCommand.obj \
+   parser.obj \
+   msgqueue.obj \
+   sharedmemory.obj \
+     ddEventiterator.obj \
+     ndd_control.obj \
+     gzbuffer.obj \
+     ogzBuffer.obj \
+  simpleRandom.obj \
+   process_pcf_file.obj 
+
+#  oncsetEventiterator.obj \
+#  etEventiterator.obj \
+#  listEventiterator.obj \
+#    packetMakerPAM.obj \
+#     gzbuffer.obj \
+
+
+LINK32_OBJS= \
+   Cframe.obj \
+    CframeV1.obj \
+    Cpacket.obj \
+    CpacketV1.obj \
+    dataBlock.obj \
+    errorBlock.obj \
+    fakeFrame.obj \
+    formatError.obj \
+    formatIO.obj \
+    framePackets.obj \
+    frameRoutines.obj \
+    packetRoutines.obj \
+     A_Event.obj \
+     buffer.obj \
+     gzbuffer.obj \
+     ogzBuffer.obj \
+     olzoBuffer.obj \
+     lzobuffer.obj \
+     decoding_routines.obj \
+     evt_mnemonic.obj \
+     oBuffer.obj \
+     oEvent.obj \
+     oncsBuffer.obj \
+     oncsEvent.obj \
+     oncsEventiterator.obj \
+     oncsSub_id2evt.obj \
+     oncsSub_id4evt.obj \
+     oncsSub_iddcfem.obj \
+     oncsSub_idhammond.obj \
+     oncsSub_idmiznhc.obj \
+     oncsSub_idsam.obj \
+     oncsSub_idtecfem.obj \
+     oncsSub_idsis3300.obj \
+     oncsSubevent.obj \
+     oncs_mnemonic.obj \
+     packet_A.obj \
+     packet_bbc_dcm0.obj \
+     packet_bbc_dcm1.obj \
+     packet_bbc_dcm2.obj \
+     packet_bbc_ll1.obj \
+     packet_bbc_ll1.obj \
+     packet_dch_dcm0.obj \
+     packet_dch_dcm1.obj \
+     packet_dch_dcm2.obj \
+     packet_emc.obj \
+     packet_emc_dcm0.obj \
+     packet_emc_dcms.obj \
+     packet_emc_dcm32.obj \
+  packet_emc_oldstyle.obj \
+  packet_emc_reference.obj \
+  packet_emc_olddcm32.obj \
+     packet_gl1.obj \
+     packet_gl1p.obj \
+  packet_gl1psum.obj \
+  packet_gl1_evclocks.obj \
+  packet_lvl2decision.obj \
+  packet_lvl2primitive.obj \
+     packet_idcstr.obj \
+     packet_id2evt.obj \
+     packet_id4evt.obj \
+     packet_id4scaler.obj \
+     packet_mnemonic.obj \
+     packet_muid_dcm0.obj \
+     packet_muid_ll1.obj \
+  packet_muid_hor_ll1.obj \
+  packet_muid_ver_ll1.obj \
+  packet_ntczdc_ll1.obj \
+  packet_big_ll1.obj \
+  packet_ert_ll1.obj \
+     packet_muta_dcm0.obj \
+     packet_muta_dcm1.obj \
+     packet_muta_dcm2.obj \
+     packet_mutc_dcm0.obj \
+     packet_mutc_dcm1.obj \
+     packet_mutc_dcm2.obj \
+     packet_mutc_dcm3.obj \
+     packet_mutc_fpga.obj \
+  packet_bbc_fpga.obj \
+  packet_tof_fpga.obj \
+  packet_pc_fpga.obj \
+  packet_rich_fpga.obj \
+  packet_mvd_fpga.obj \
+  packet_muid_fpga.obj \
+     packet_mvd_dcm0.obj \
+     packet_mvd_dcm1.obj \
+     packet_mvd_dcm2.obj \
+     packet_mvd_ll1.obj \
+     packet_pbgl_dcm0.obj \
+     packet_pbgl_dcm1.obj \
+     packet_pbgl_dcm2.obj \
+     packet_pbgl_ll1.obj \
+  packet_emc_fpga.obj \
+     packet_pbsc_ll1.obj \
+     packet_pc_dcm0.obj \
+     packet_pc_dcm1.obj \
+     packet_pc_dcm2.obj \
+     packet_pc_dcm3.obj \
+     packet_pc_fpga.obj \
+     packet_rich_dcm0.obj \
+     packet_rich_dcm1.obj \
+     packet_rich_dcm2.obj \
+     packet_rich_ll1.obj \
+     packet_tec_dcm0.obj \
+     packet_tec_dcm1.obj \
+     packet_tec_dcm2.obj \
+     packet_tof_dcm0.obj \
+     packet_tof_dcm1.obj \
+     packet_tof_dcm16.obj \
+     packet_tof_dcm2.obj \
+     packet_tof_ll1.obj \
+     packet_w124.obj \
+     packet_zdc_dcm0.obj \
+     packet_zdc_dcm1.obj \
+     packet_zdc_dcm2.obj \
+  packet_zdc_fpga.obj \
+  packet_zdc_fpga.obj \
+  packet_ntct0_fpga.obj \
+  packet_cdevpolarimeter.obj \
+  packet_cdevir.obj \
+  packet_cdevwcm.obj \
+  packet_cdevbpm.obj \
+  packet_cdevmadch.obj \
+  packet_cdevpoltarget.obj \
+  packet_fcal_fpga.obj \
+  packet_cdevring.obj \
+  packet_cdevdvm.obj \
+     testEventiterator.obj \
+     fileEventiterator.obj \
+     PHTimeStamp.obj \
+     PHBigTimeStamp.obj \
+     win_getopt.obj
+
+#  md5.obj \
+#  PHmd5Utils.obj \
+#  PHmd5Value.obj \
+#  oncsetEventiterator.obj \
+#  simpleRandom.obj \
+#     packet_emc_fpga.obj \
+#     packet_emc_olddcm32.obj  \
+#     packet_emc_oldstyle.obj \
+#     packet_emc_reference.obj \
+#     packet_zdc_fpga.obj  \
+#     packet_lvl2primitive.obj \
+#     packet_lvl2decision.obj \
+#     packet_ntct0_fpga.obj \
+#     packet_cdevpolarimeter.obj \
+#     packet_cdevir.obj \
+#     packet_muid_hor_ll1.obj \
+#     packet_muid_ver_ll1.obj \
+#     packet_cdevwcm.obj 	
+
+#     packet_pbsc_dcm0_new.obj 
+
+
+
+#ALL : libEvent.dll dlist.exe dpipe.exe
+
+ALL : libEvent.lib dlist.exe dpipe.exe ddump.exe
+
+
+CLEAN :
+
+dpipe.exe: dpipe.obj  
+	link -out:dpipe.exe dpipe.obj   libEvent.lib
+
+dlist.exe: dlist.obj  
+	link -out:dlist.exe dlist.obj   libEvent.lib
+
+ddump.exe: ddump.obj  
+	link -out:ddump.exe ddump.obj   libEvent.lib
+
+
+#kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib -nologo -machine:I386 
+
+
+xx.exE_ptx.obj:  
+	link -out:xx.exe xx.obj  libEvent.lib
+
+tp.exe: tp.obj  
+	link -out:tp.exe tp.obj libEvent.lib
+
+
+libEvent.dll : $(LINK32_OBJS)
+	$(LINK32) -out:libEvent.dll -DLL $(LINK32_FLAGS) $(LINKDLL_FLAGS) $(LINK32_OBJS) "c:\Program Files\zlib\zlib-1.2.1\zlib.lib ../lzo/lzo.lib
+
+libEvent.lib : $(LINK32_OBJS)
+	$(LINK32) -lib -DEBUG -out:libEvent.lib $(LINK32_FLAGS) $(LINK32_OBJS) "c:\Program Files\zlib\zlib-1.2.1\zlib.lib" ../lzo/lzo.lib 
+%.obj:%.c
+	$(CPP) -DHAVE_STRING_H -DHAVE_GETOPT_H $(CPP_PROJC) -Tc $< 
+
+%.obj:%.cc
+	$(CPP) -DHAVE_STRING_H  -DHAVE_GETOPT_H $(CPP_PROJ) -Tp $< 
+
+%.obj:%.C
+	$(CPP) -DHAVE_STRING_H  -DHAVE_GETOPT_H $(CPP_PROJ) -Tp $< 
+
+
+%.obj:%.cpp
+	$(CPP)  -DHAVE_STRING_H   -DHAVE_GETOPT_H $(CPP_PROJ) -Tp $< 
+
+
+%.obj:%.cxx
+	$(CPP) @<  -DHAVE_STRING_H  -DHAVE_GETOPT_H  $(CPP_PROJ) $< 
+
+
+.c.sbr:
+	$(CPP) @<   $(CPP_PROJ) $< 
+
+
+.cpp.sbr::
+	$(CPP) @<  $(CPP_PROJ) $< 
+
+
+.cxx.sbr:
+	$(CPP) @<   $(CPP_PROJ) $< 
+
+
+
+
+
+
+
+
+
+
+
+
+
+

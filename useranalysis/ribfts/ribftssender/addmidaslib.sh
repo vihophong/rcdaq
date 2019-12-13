@@ -1,0 +1,1 @@
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/NiGIRI/brIKEN2017/ribfts/MIDAS/Linux/lib64

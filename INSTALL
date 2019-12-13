@@ -1,0 +1,112 @@
+Download rcdaq-rikensuite
+
+https://drive.google.com/file/d/16zWaowOpWldk8Ra0UtuWv3Qbvw6jl702/view?usp=sharing
+
+- Making build and install directories
+
+cd /home/wasabi/rcdaq-rikensuite/
+
+mkdir build-rcdaq
+mkdir install-rcdaq
+
+cd build-rcdaq/
+
+mkdir rcdaq
+
+mkdir online_distribution
+mkdir -p online_distribution/eventlibraries
+mkdir -p online_distribution/pmonitor
+
+mkdir -p online_distribution/eventlibraries
+mkdir -p online_distribution/pmonitor
+
+- Define an environmental variable ONLINE_MAIN
+
+Add to .bashrc and also run command
+
+#RCDAQ                                                                                    
+export ONLINE_MAIN=/home/wasabi/rcdaq-rikensuite/install-rcdaq
+
+export OFFLINE_MAIN=/home/wasabi/rcdaq-rikensuite/install-rcdaq
+
+ 
+
+- Install rcdaq
+
+cd rcdaq/
+
+../../rcdaq-rikensuite/rcdaq/autogen.sh --prefix=$ONLINE_MAIN
+
+make install
+
+- Install online_distribution
+
+Install lzo library: sudo yum  install lzo lzo-devel
+
+Install boost library: sudo yum install boost boost-devel
+
+Using root5 enviroinment
+
+cd /home/wasabi/rcdaq-rikensuite/build-rcdaq/online_distribution/newbasic
+
+../../../rcdaq-rikensuite/online_distribution/newbasic/autogen.sh --prefix=$ONLINE_MAIN
+
+make install
+
+cd /home/wasabi/rcdaq-rikensuite/build-rcdaq/online_distribution/pmonitor
+
+../../../rcdaq-rikensuite/online_distribution/pmonitor/autogen.sh --prefix=$ONLINE_MAIN
+
+make install
+
+- Add to .bashrc
+
+Add to .bashrc
+
+#RCDAQ                                                                                   
+
+PATH=$PATH:$ONLINE_MAIN/bin
+export LD_LIBRARY_PATH=$ONLINE_MAIN/lib
+source $ONLINE_MAIN/bin/aliases.sh
+export ROOT_INCLUDE_PATH=$ONLINE_MAIN/include:$ONLINE_MAIN/include/Event:$ONLINE_MAIN/include/pmonitor
+
+- Install CAENdrs
+
+cd /home/wasabi/rcdaq-rikensuite/build-rcdaq/CAENdrs
+
+../../rcdaq-rikensuite/CAENdrs/autogen.sh --prefix=$ONLINE_MAIN
+
+make install
+
+Got Errors
+
+/usr/include/CAENVMEtypes.h:323:9: error: 'VARIANT_BOOL' does not name a type
+         CAEN_BOOL cvDS0;      /* Data Strobe 0 signal    
+
+Just modify /usr/include/CAENVMEtypes.h
+
+//#ifdef LINUX
+//#define CAEN_BYTE       unsigned char
+//#define CAEN_BOOL       int
+//#else
+//#define CAEN_BYTE       byte
+//#define CAEN_BOOL       VARIANT_BOOL
+//#endif
+#define CAEN_BYTE       unsigned char
+#define CAEN_BOOL       int
+ 
+
+Then do again: make install
+
+- Compile simple online monitoring code
+
+cd /home/wasabi/rcdaq-rikensuite/rcdaq-rikensuite/useranalysis/online1
+
+make
+
+- deactive/disable firewalld service to enable web access
+
+systemctl stop firewalld
+
+systemctl disable firewalld
+
