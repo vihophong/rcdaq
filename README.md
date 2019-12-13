@@ -6,3 +6,6 @@ Let's see if that works. I don't want to loose several years worth of history.
 
 It didn't come out the way I wanted... I wanted data_acqusition/rcdaq etc. Next try.
 
+All credit goes to Dr. Martin Purschke 
+
+The lastest version does not work with Centos version < 7
