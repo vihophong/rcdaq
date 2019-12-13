@@ -179,7 +179,6 @@ int go_on =1;
 int adaptivebuffering = 15;
 int last_bufferwritetime  = 0;
 
-
 int registerTriggerHandler ( TriggerHandler *th)
 {
   // we already have one
@@ -951,6 +950,161 @@ int daq_begin(const int irun, std::ostream& os)
   return 0;
 }
 
+//! Phong added
+int daq_restart_new_file()
+{
+
+    // END RUN (just close file)
+//    if ( ! (Daq_Status & DAQ_RUNNING) )
+//      {
+//        os << "Run is not active" << endl;;
+//        return -1;
+//      }
+//    disable_trigger();
+//    device_endrun();
+
+//    Daq_Status ^= DAQ_RUNNING;
+
+    readout(ENDRUNEVENT);
+
+    switch_buffer();  // we force a buffer flush
+
+    if ( file_is_open )
+      {
+        pthread_mutex_lock(&WriteProtectSem);
+        pthread_mutex_unlock(&WriteProtectSem);
+
+        double v = run_volume;
+        v /= (1024*1024);
+
+        //if (ElogH) ElogH->EndrunLog( TheRun,"RCDAQ", Event_number, v, StartTime);
+        close (outfile_fd);
+        outfile_fd = 0;
+        file_is_open = 0;
+      }
+    //os << "Run " << TheRun << " ended" << endl;
+
+    unsetenv ("DAQ_RUNNUMBER");
+    unsetenv ("DAQ_FILENAME");
+    unsetenv ("DAQ_STARTTIME");
+
+    Event_number = 0;
+    run_volume = 0;    // volume in longwords
+    BytesInThisRun = 0;    // bytes actually written
+    Buffer_number = 0;
+    CurrentFilename = "";
+    StartTime = 0;
+
+
+    // START NEW RUN (just open file)
+    TheRun++;// just increase run number
+
+//    if ( Daq_Status & DAQ_RUNNING )
+//      {
+//        os << "Run is already active" << endl;;
+//        return -1;
+//      }
+
+
+//    if (  irun ==0)
+//      {
+//        TheRun++;
+//      }
+//    else
+//      {
+//        TheRun = irun;
+//      }
+
+    if ( daq_open_flag )
+      {
+        int status = open_file ( TheRun, &outfile_fd);
+        if ( !status)
+          {
+//            if (ElogH) ElogH->BegrunLog( TheRun,"RCDAQ",
+//                                         get_current_filename());
+
+            daq_write_runnumberfile(TheRun);
+            last_bufferwritetime  = time(0);  // initialize this at begin-run
+
+          }
+        else
+          {
+            //os << "Could not open output file - Run " << TheRun << " not started" << endl;;
+            return -1;
+          }
+      }
+    //initialize the Buffer and event number
+    Buffer_number = 1;
+    Event_number  = 1;
+
+    // set the status to "running"
+    //Daq_Status |= DAQ_RUNNING;
+    set_eventsizes();
+    // initialize Buffer1 to be the fill buffer
+    fillBuffer      = &Buffer1;
+    transportBuffer = &Buffer2;
+
+    // a safety check: see that the buffers haven't been adjusted
+    // to a smaller value than the event size
+    int wantedmaxsize = 0;
+    for (int i = 0; i< MAXEVENTID; i++)
+      {
+        if ( (4*Eventsize[i] + 4*32) > fillBuffer->getMaxSize()
+             || (4*Eventsize[i] + 4*32) > transportBuffer->getMaxSize() )
+          {
+            int x = 4*Eventsize[i] + 4*32;   // this is now in bytes
+            if ( x > wantedmaxsize ) wantedmaxsize = x;
+          }
+      }
+    if ( wantedmaxsize)
+      {
+        if ( fillBuffer->setMaxSize(wantedmaxsize) || transportBuffer->setMaxSize(wantedmaxsize))
+          {
+//            os << "Cannot start run - event sizes larger than buffer, size "
+//               <<  wantedmaxsize/1024 << " Buffer size "
+//               << transportBuffer->getMaxSize()/1024 << endl;
+            return -1;
+          }
+        //      os << " Buffer size increased to " << transportBuffer->getMaxSize()/1024 << " KB"<< endl;
+
+      }
+
+    StartTime = time(0);
+
+
+    // here we sucessfully start a run. So now we set the env. variables
+    char str[128];
+    // RUNNUMBER
+    sprintf( str, "%d", TheRun);
+    setenv ( "DAQ_RUNNUMBER", str, 1);
+    setenv ( "DAQ_FILERULE", TheFileRule.c_str() , 1);
+
+    sprintf( str, "%ld", StartTime);
+    setenv ( "DAQ_STARTTIME", str , 1);
+
+    if ( daq_open_flag )
+      {
+        setenv ( "DAQ_FILENAME", CurrentFilename.c_str() , 1);
+      }
+
+    fillBuffer->prepare_next(Buffer_number,TheRun);
+
+    run_volume = 0;
+
+    //device_init();
+
+    // readout the begin-run event
+    readout(BEGRUNEVENT);
+
+    //now enable the interrupts and reset the deadtime
+    //enable_trigger();
+
+
+    //os << "Run " << TheRun << " started" << endl;;
+
+
+    return 0;
+}
 
 int daq_end(std::ostream& os)
 {
@@ -1109,11 +1263,18 @@ void * EventLoop( void *arg)
 		  Origin ^= DAQ_TRIGGER;
 			  
 		  reset_deadtime();
-		  if (  rstatus)    // we got an endrun signal
+                  if (  rstatus == 1)    // we got an endrun signal
 		    {
 		      daq_end ( std::cout);
 		      //go_on = 0;
 		    }
+
+                  //! Phong added
+                  if (  rstatus == 2)    // we got a signal to open new file without ending DAQ ( modified by Phong )
+                    {
+                      daq_restart_new_file();
+                      //go_on = 0;
+                    }
 		  		  
 		}
 	    }
@@ -1191,38 +1352,58 @@ int readout(const int etype)
       switch_buffer();
       status = fillBuffer->nextEvent(etype,Event_number,  Eventsize[etype]);
     }
-  Event_number++;
 
+//! Phong Jul.2019: new lines for pulling readout  
 
   for ( d_it = DeviceList.begin(); d_it != DeviceList.end(); ++d_it)
     {
       len += fillBuffer->addSubevent ( (*d_it) );
     }
 
-  run_volume += 4*len;
-  //  cout << "len, run_volume = " << len << "  " << run_volume << endl;
-
+  if (len>EVTHEADERLENGTH)
+  {
+      Event_number++;
+      run_volume += 4*len;
+  }
   int returncode = 0;
+
+//! old lines for interupt readout
+//  Event_number++;
+
+
+//  for ( d_it = DeviceList.begin(); d_it != DeviceList.end(); ++d_it)
+//    {
+//      len += fillBuffer->addSubevent ( (*d_it) );
+//    }
+
+//  run_volume += 4*len;
+//  //  cout << "len, run_volume = " << len << "  " << run_volume << endl;
+
+//  int returncode = 0;
+
 
   if (  Daq_Status & DAQ_RUNNING )
     {
       if ( etype == DATAEVENT && max_volume > 0 && run_volume >= max_volume) 
 	{
-	  cout << " automatic end after " << max_volume /(1024*1024) << " Mb" << endl;
-	  returncode = 1;
+          cout << " automatic increase after " << max_volume /(1024*1024) << " Mb" << endl;
+          //! Phong modified
+          returncode = 2;
+          //original
+          //returncode = 1;
 	}
       
       if ( etype == DATAEVENT && max_events > 0 && Event_number >= max_events ) 
 	{
-	  cout << " automatic end after " << max_events<< " events" << endl;
+          cout << " automatic end after " << max_events<< " events" << endl;
 	  returncode = 1;
 	}
     }
 
   if ( adaptivebuffering  &&  time(0) - last_bufferwritetime > adaptivebuffering )
-    {
-      switch_buffer();
-      //      cout << "adaptive buffer switching" << endl;
+    {      
+      if (len>EVTHEADERLENGTH)
+          switch_buffer();      
     }
 
   return returncode;
