@@ -12,4 +12,4 @@ The lastest version does not work with Centos version < 7
 
 Read INSTALL for installation instruction
 
-versatile rcdaq (vrcdaq)
+Versatile rcdaq (vrcdaq)
