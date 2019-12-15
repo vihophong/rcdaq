@@ -11,3 +11,5 @@ All credit goes to Dr. Martin Purschke
 The lastest version does not work with Centos version < 7
 
 Read INSTALL for installation instruction
+
+versatile daq (vdaq)
