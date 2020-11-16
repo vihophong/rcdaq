@@ -353,7 +353,7 @@ int readn (int fd, char *ptr, const int nbytes)
     {
       if ( fd_is_socket) nread = recv (fd, ptr, nleft, MSG_NOSIGNAL);
       else nread = read (fd, ptr, nleft);
-da
+
       if ( nread <= 0 ) 
 	{
 	  return nread;
@@ -938,7 +938,7 @@ int daq_begin(const int irun, std::ostream& os)
   return 0;
 }
 //! Phong added
-int daq_restart_new_file(std::ostream& os)
+int daq_restart_new_file()
 {
   // END RUN (just close file)
 
