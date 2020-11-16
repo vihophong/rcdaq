@@ -17,6 +17,9 @@ void *EventLoop( void *arg);
 int daq_end();
 int Command( const int command);
 
+//! Phong added
+int daq_restart_new_file();
+
 
 int switch_buffer();
 int device_init();
