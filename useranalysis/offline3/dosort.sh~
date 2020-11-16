@@ -1,1 +1,0 @@
-root -b -q 'sorter/dosort.C("'$1'","'$2'")'
