@@ -14,6 +14,7 @@ daq_device_rtclock::daq_device_rtclock(const int eventtype
 
   m_eventType  = eventtype;
   m_subeventid = subeventid;
+  identify();
 }
 
 daq_device_rtclock::~daq_device_rtclock()
@@ -77,9 +78,12 @@ int daq_device_rtclock::put_data(const int etype, int * adr, const int length )
       // update id's etc
       sevt->sub_id =  m_subeventid;
       sevt->sub_type=4;
-      sevt->sub_decoding = IDRTCLK;
+      //! 08/12/2020 Phong modified
+      //sevt->sub_decoding = IDRTCLK;
+      sevt->sub_decoding = 85;
+
       sevt->reserved[0] = 0;
-      sevt->reserved[1] = 0;
+      sevt->reserved[1] = 0;      
       
       
       int  *d = (int *) &sevt->data;
@@ -100,8 +104,10 @@ int daq_device_rtclock::put_data(const int etype, int * adr, const int length )
 	}
       previous_clk = clk;
 
-      sevt->sub_padding = 0;
-      sevt->sub_length += 6;
+      //! 08/12/2020 Phong modified
+      //sevt->sub_padding = 0;
+      sevt->sub_padding = 6;
+      sevt->sub_length += 6;      
       return  sevt->sub_length;
     }
 }
